@@ -36,23 +36,23 @@
   --accent-55: rgba(112,48,160,0.55);
   --accent-20: rgba(112,48,160,0.20);
 
-  /* Text on dark bg — boosted for readability */
-  --text-h:   #ffffff;
-  --text-b:   rgba(238,232,255,0.96);
-  --text-m:   rgba(210,198,255,0.82);
-  --text-p:   rgba(190,175,245,0.55);   /* input placeholder */
+  /* Text on light bg */
+  --text-h:   #140a2d;
+  --text-b:   #2d1f52;
+  --text-m:   #6b5a8a;
+  --text-p:   #a090bc;   /* input placeholder */
 
-  /* Glass surfaces — more opaque, stronger blur */
-  --glass-copy:     rgba(8, 3, 32, 0.72);
-  --glass-form:     rgba(6, 2, 26, 0.82);
-  --glass-nav:      rgba(5, 1, 22, 0.86);
-  --glass-foot:     rgba(3, 1, 15, 0.90);
-  --glass-border:   rgba(255,255,255,0.11);
+  /* Light surfaces */
+  --glass-copy:     #ffffff;
+  --glass-form:     #ffffff;
+  --glass-nav:      rgba(255,255,255,0.96);
+  --glass-foot:     #ffffff;
+  --glass-border:   rgba(142,45,226,0.13);
   --glass-border-h: var(--pa-55);
 
-  /* Input surfaces (needs solid bg for readability) */
-  --input-bg:     rgba(255,255,255,0.93);
-  --input-border: rgba(255,255,255,0.18);
+  /* Input surfaces */
+  --input-bg:     #ffffff;
+  --input-border: rgba(142,45,226,0.22);
   --input-focus:  var(--brand-start);
 
   --r:      12px;
@@ -69,7 +69,7 @@
 html  { scroll-behavior:smooth; font-size:16px; overflow-x: hidden; }
 body  {
   font-family: 'Poppins', sans-serif;
-  background: #080320;
+  background: #ffffff;
   color: var(--text-b);
   line-height: 1.65;
   overflow-x: hidden;
@@ -83,11 +83,22 @@ img { display:block; max-width:100%; }
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
+  will-change: transform;
+}
+#bg-glow {
+  position: absolute;
+  inset: -8% -5%;
   background:
-    radial-gradient(ellipse 120% 80% at 15% 20%, rgba(142,45,226,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse 90% 70% at 85% 75%,  rgba(74,0,224,0.20)  0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 50% 50%,  rgba(112,48,160,0.08) 0%, transparent 70%),
-    linear-gradient(160deg, #0a0428 0%, #0d0535 40%, #070220 100%);
+    radial-gradient(ellipse 65% 55% at 15% 20%,  rgba(124,58,237,0.48) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 85% 78%,  rgba(67,0,220,0.40)  0%, transparent 55%),
+    radial-gradient(ellipse 48% 42% at 72% 14%,  rgba(99,102,241,0.32) 0%, transparent 52%),
+    radial-gradient(ellipse 42% 52% at 22% 82%,  rgba(109,40,217,0.30) 0%, transparent 52%),
+    radial-gradient(ellipse 55% 42% at 50% 50%,  rgba(167,139,250,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 32% 38% at 80% 38%,  rgba(139,92,246,0.24) 0%, transparent 52%),
+    linear-gradient(160deg, #f5f0ff 0%, #ede8ff 50%, #f2eeff 100%);
+  animation: bgDrift 28s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ─── LAYOUT ─────────────────────────────────── */
@@ -110,11 +121,36 @@ img { display:block; max-width:100%; }
 
 /* ─── GLASS MIXIN ────────────────────────────── */
 .glass {
-  background: var(--glass-copy);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px) saturate(180%) brightness(1.06);
+  -webkit-backdrop-filter: blur(16px) saturate(180%) brightness(1.06);
+  background: rgba(255,255,255,0.28);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-top-color: rgba(255,255,255,0.78);
+  border-left-color: rgba(255,255,255,0.65);
+  box-shadow:
+    0 8px 32px rgba(80,0,200,0.14),
+    0 2px 8px rgba(0,0,0,0.09),
+    inset 0 1px 0 rgba(255,255,255,0.72),
+    inset 1px 0 0 rgba(255,255,255,0.48);
+  overflow: hidden;
+  position: relative;
 }
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    148deg,
+    rgba(255,255,255,0.58) 0%,
+    rgba(255,255,255,0.18) 22%,
+    rgba(255,255,255,0.03) 48%,
+    rgba(255,255,255,0.07) 100%
+  );
+}
+.glass > * { position: relative; z-index: 1; }
 
 /* ─── GRADIENT TEXT ──────────────────────────── */
 .gt {
@@ -129,10 +165,41 @@ img { display:block; max-width:100%; }
   from { opacity:0; transform:translateY(18px); }
   to   { opacity:1; transform:translateY(0); }
 }
+
 @keyframes pulseRing {
   0%   { opacity:.4; transform:scale(1); }
   100% { opacity:0;  transform:scale(2.6); }
 }
+@keyframes bgDrift {
+  0%,100% { transform: translate(0,      0)      scale(1.00); }
+  33%     { transform: translate(-1.2%,  0.8%)   scale(1.01); }
+  66%     { transform: translate( 1.0%, -0.7%)   scale(1.01); }
+}
+@keyframes badgeGlow {
+  0%,100% { box-shadow: 0 0 0  0   rgba(167,139,250,0.00); }
+  50%     { box-shadow: 0 0 0  8px rgba(167,139,250,0.24); }
+}
+
+
+.time-badge.badge-glow { animation: badgeGlow 3.2s ease-in-out .5s infinite; }
+
+/* Card hover lift — desktop only */
+@media(min-width:900px) {
+  .copy-card, .form-card {
+    transition: transform .35s cubic-bezier(.22,1,.36,1),
+                box-shadow .35s ease,
+                border-color .35s ease;
+  }
+  .copy-card:hover, .form-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 8px 36px rgba(0,0,0,0.12),
+      0 2px 10px rgba(0,0,0,0.07),
+      inset 0 1px 0 rgba(255,255,255,0.82),
+      inset 1px 0 0 rgba(255,255,255,0.58);
+  }
+}
+
 
 @media(prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation:none!important; transition:none!important; }
@@ -241,10 +308,13 @@ img { display:block; max-width:100%; }
   transition: background .25s, backdrop-filter .25s, box-shadow .25s;
 }
 .nav.solid {
-  background: var(--glass-nav);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(18px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(18px) saturate(200%) brightness(1.06);
+  border-bottom: 1px solid rgba(255,255,255,0.50);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.65),
+    0 4px 16px rgba(80,0,200,0.10);
 }
 .nav .wrap {
   max-width: 100%;
@@ -273,22 +343,22 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 14.5px;
   font-weight: 500;
-  color: rgba(255,255,255,0.76);
+  color: rgba(20,10,45,0.65);
   text-decoration: none;
   border-radius: 8px;
   transition: color .18s, background .18s;
   white-space: nowrap;
 }
 .nav-link:hover {
-  color: #fff;
-  background: rgba(255,255,255,0.06);
+  color: var(--brand-start);
+  background: rgba(142,45,226,0.06);
 }
 .nav-link svg { opacity: .5; transition: opacity .18s; }
 .nav-link:hover svg { opacity: .9; }
 .nav-vdivider {
   width: 1px;
   height: 18px;
-  background: rgba(255,255,255,0.13);
+  background: rgba(20,10,45,0.12);
   margin: 0 6px;
   flex-shrink: 0;
 }
@@ -305,11 +375,11 @@ img { display:block; max-width:100%; }
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  color: rgba(255,255,255,0.76);
+  color: rgba(20,10,45,0.65);
   transition: color .18s, background .18s;
 }
-.nav-lang:hover { color: #fff; background: rgba(255,255,255,0.06); }
-.nav-lang-wrap.open .nav-lang { color: #fff; background: rgba(255,255,255,0.06); }
+.nav-lang:hover { color: var(--brand-start); background: rgba(142,45,226,0.06); }
+.nav-lang-wrap.open .nav-lang { color: var(--brand-start); background: rgba(142,45,226,0.06); }
 .nav-lang-flag { font-size: 17px; line-height: 1; display: block; }
 .nav-lang-code {
   font-family: 'Poppins', sans-serif;
@@ -327,10 +397,11 @@ img { display:block; max-width:100%; }
   right: 0;
   min-width: 148px;
   list-style: none;
-  background: rgba(5,1,22,0.97);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-top-color: rgba(255,255,255,0.80);
   border-radius: 10px;
   padding: 5px;
   display: flex;
@@ -341,7 +412,10 @@ img { display:block; max-width:100%; }
   pointer-events: none;
   transform: translateY(-6px);
   transition: opacity .18s ease, transform .18s ease;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  box-shadow:
+    0 12px 40px rgba(80,0,200,0.18),
+    0 2px 8px rgba(0,0,0,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.72);
 }
 .nav-lang-wrap.open .lang-dropdown {
   opacity: 1;
@@ -357,16 +431,17 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 13.5px;
   font-weight: 500;
-  color: rgba(255,255,255,0.72);
+  color: rgba(20,10,45,0.65);
   cursor: pointer;
   transition: background .15s, color .15s;
   white-space: nowrap;
 }
-.lang-option:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.lang-option:hover { background: rgba(142,45,226,0.06); color: var(--brand-start); }
 .lang-option--active {
-  color: rgba(167,139,250,0.95);
+  color: var(--brand-start);
+  font-weight: 600;
 }
-.lang-option--active:hover { background: rgba(142,45,226,0.12); }
+.lang-option--active:hover { background: rgba(142,45,226,0.08); }
 .lang-option-flag { font-size: 16px; line-height: 1; }
 /* ─── HAMBURGER BUTTON ───────────────────────── */
 .nav-hamburger {
@@ -383,11 +458,11 @@ img { display:block; max-width:100%; }
   border-radius: 8px;
   transition: background .18s;
 }
-.nav-hamburger:hover { background: rgba(255,255,255,0.06); }
+.nav-hamburger:hover { background: rgba(142,45,226,0.06); }
 .nav-hamburger span {
   display: block;
   height: 2px;
-  background: rgba(255,255,255,0.80);
+  background: rgba(20,10,45,0.65);
   border-radius: 2px;
   transition: transform .22s ease, opacity .18s ease, width .18s ease;
   transform-origin: center;
@@ -411,10 +486,11 @@ img { display:block; max-width:100%; }
     top: var(--nav-h);
     left: 0;
     right: 0;
-    background: rgba(5,1,22,0.97);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.50);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
     padding: 10px 16px 16px;
     list-style: none;
     opacity: 0;
@@ -447,8 +523,8 @@ img { display:block; max-width:100%; }
     pointer-events: auto;
     transform: none;
     box-shadow: none;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(142,45,226,0.04);
+    border: 1px solid rgba(142,45,226,0.10);
     margin-top: 4px;
     display: none;
   }
@@ -468,8 +544,7 @@ img { display:block; max-width:100%; }
   position: absolute;
   inset: -10% -20%;
   background: radial-gradient(ellipse 70% 80% at 50% 50%,
-    rgba(3, 1, 14, 0.52) 0%,
-    rgba(3, 1, 14, 0.28) 45%,
+    rgba(142,45,226,0.06) 0%,
     transparent 72%);
   pointer-events: none;
   z-index: -1;
@@ -480,8 +555,8 @@ img { display:block; max-width:100%; }
   font-weight: 700;
   line-height: 1.18;
   letter-spacing: -.02em;
-  color: #ffffff;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.55);
+  color: var(--text-h);
+  text-shadow: none;
   max-width: 980px;
   margin-inline: auto;
   margin-bottom: 20px;
@@ -490,8 +565,8 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: clamp(19px, 2vw, 25px);
   line-height: 1.72;
-  color: rgba(235,228,255,0.94);
-  text-shadow: 0 1px 12px rgba(0,0,0,0.45);
+  color: var(--text-m);
+  text-shadow: none;
   max-width: 880px;
   margin-inline: auto;
 }
@@ -510,10 +585,7 @@ img { display:block; max-width:100%; }
   content: '';
   position: absolute;
   inset: -32px -3%;
-  background: radial-gradient(ellipse 85% 90% at 50% 50%,
-    rgba(4,1,22,0.42) 0%,
-    rgba(4,1,22,0.18) 55%,
-    transparent 80%);
+  background: transparent;
   border-radius: 40px;
   pointer-events: none;
   z-index: -1;
@@ -574,13 +646,23 @@ img { display:block; max-width:100%; }
   .deliv-item       { font-size: 16px; }
 }
 
-/* ─── LEFT CARD ──────────────────────────────── */
+/* ─── LEFT CARD — same glass structure as form-card ── */
 .copy-card {
-  padding: 40px 44px 36px;
-  border-radius: var(--r-lg);
+  position: relative;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  border-radius: var(--r-lg);
+  padding: 40px 44px 36px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-top-color: rgba(255,255,255,0.80);
+  border-left-color: rgba(255,255,255,0.70);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.08),
+    0 1px  6px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.80),
+    inset 1px 0 0 rgba(255,255,255,0.55);
 }
 @media(max-width:640px) {
   .copy-card,
@@ -595,7 +677,7 @@ img { display:block; max-width:100%; }
   font-weight: 700;
   letter-spacing: .13em;
   text-transform: uppercase;
-  color: rgba(167,139,250,0.72);
+  color: var(--brand-accent);
   margin-bottom: 6px;
 }
 
@@ -603,7 +685,7 @@ img { display:block; max-width:100%; }
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(26px, 2.2vw, 38px);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-h);
   line-height: 1.25;
   margin-bottom: 14px;
   letter-spacing: -.015em;
@@ -613,7 +695,7 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 18px;
   line-height: 1.76;
-  color: rgba(220,212,255,0.88);
+  color: var(--text-b);
   margin-bottom: 18px;
   max-width: 580px;
 }
@@ -633,12 +715,12 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(225,215,255,0.90);
+  color: var(--text-b);
   line-height: 1.45;
 }
 .prob-pip {
   flex-shrink: 0;
-  color: rgba(167,139,250,0.70);
+  color: var(--brand-accent);
   font-size: 18px;
   line-height: 1;
   margin-top: -1px;
@@ -646,7 +728,7 @@ img { display:block; max-width:100%; }
 
 .csect-rule {
   height: 1px;
-  background: rgba(255,255,255,0.07);
+  background: rgba(142,45,226,0.12);
   margin: 24px 0;
 }
 
@@ -664,7 +746,7 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 18px;
   line-height: 1.55;
-  color: rgba(225,215,255,0.90);
+  color: var(--text-b);
 }
 .deliv-check {
   flex-shrink: 0;
@@ -690,38 +772,110 @@ img { display:block; max-width:100%; }
   gap: 6px;
   margin-top: 20px;
   padding: 6px 13px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(142,45,226,0.06);
+  border: 1px solid rgba(142,45,226,0.16);
   border-radius: var(--r-pill);
   font-size: 14px;
-  color: rgba(196,181,253,0.72);
+  color: var(--brand-accent);
 }
 .time-badge svg {
   width: 13px; height: 13px;
   flex-shrink: 0;
-  color: rgba(167,139,250,0.80);
+  color: var(--brand-accent);
 }
 
-/* ─── RIGHT COLUMN ───────────────────────────── */
+/* ─── LEFT / RIGHT COLUMNS ───────────────────── */
+.left-col,
 .right-col {
   display: flex;
   flex-direction: column;
+  position: relative;
+  isolation: isolate;
 }
 
-/* ─── PREMIUM FORM CARD ──────────────────────── */
+/* ─── LIQUID GLASS FORM CARD ─────────────────── */
 .form-card {
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--glass-form);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid rgba(255,255,255,0.11);
   border-radius: var(--r-lg);
   padding: 40px 44px 36px;
-  box-shadow: 0 8px 48px rgba(0,0,0,0.35);
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-top-color: rgba(255,255,255,0.80);
+  border-left-color: rgba(255,255,255,0.70);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.08),
+    0 1px  6px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.80),
+    inset 1px 0 0 rgba(255,255,255,0.55);
+  transition: all 0.7s cubic-bezier(0.175,0.885,0.32,2.2);
+}
+
+/* Layer 0 — frosted backdrop */
+.lg-blur {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  backdrop-filter: blur(18px) saturate(200%) brightness(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(200%) brightness(1.08);
+  pointer-events: none;
+}
+
+/* Layer 1 — translucent white tint (light enough to see gradient through) */
+.lg-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: inherit;
+  background: rgba(255,255,255,0.28);
+  pointer-events: none;
+}
+
+/* Layer 2 — SVG specular shimmer (screen blend on white = glass glints) */
+.lg-shimmer {
+  display: none;
+  pointer-events: none;
+}
+
+/* Layer 3 — diagonal glass shine sweep */
+.lg-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 16;
+  border-radius: inherit;
+  background: linear-gradient(
+    148deg,
+    rgba(255,255,255,0.62) 0%,
+    rgba(255,255,255,0.22) 22%,
+    rgba(255,255,255,0.04) 50%,
+    rgba(255,255,255,0.08) 100%
+  );
+  pointer-events: none;
+}
+
+/* Layer 4 — inner rim highlight */
+.lg-edge {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  overflow: hidden;
+  box-shadow:
+    inset  2px  2px 2px 0 rgba(255,255,255,0.70),
+    inset -1px -1px 2px 0 rgba(255,255,255,0.25);
+  pointer-events: none;
+}
+
+/* Layer 5 — actual content */
+.lg-content {
+  position: relative;
+  z-index: 30;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-header { margin-bottom: 32px; }
@@ -729,7 +883,7 @@ img { display:block; max-width:100%; }
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(26px, 2.2vw, 38px);
   font-weight: 700;
-  color: #fff;
+  color: var(--text-h);
   line-height: 1.2;
   letter-spacing: -.02em;
   margin-bottom: 10px;
@@ -738,7 +892,7 @@ img { display:block; max-width:100%; }
   font-family: 'Poppins', sans-serif;
   font-size: 18px;
   line-height: 1.65;
-  color: rgba(210,198,255,0.78);
+  color: var(--text-m);
 }
 
 .fields-zone {
@@ -756,14 +910,14 @@ img { display:block; max-width:100%; }
 .what-next {
   margin-top: auto;
   padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(142,45,226,0.12);
 }
 .what-next-eye {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .13em;
   text-transform: uppercase;
-  color: rgba(167,139,250,0.65);
+  color: var(--brand-accent);
   margin-bottom: 14px;
 }
 .what-next-steps {
@@ -778,7 +932,7 @@ img { display:block; max-width:100%; }
   gap: 12px;
   font-size: 15px;
   line-height: 1.50;
-  color: rgba(210,200,255,0.78);
+  color: var(--text-b);
 }
 .wn-num {
   flex-shrink: 0;
@@ -798,7 +952,7 @@ img { display:block; max-width:100%; }
   font-weight: 600;
   letter-spacing: .09em;
   text-transform: uppercase;
-  color: rgba(214,200,255,0.95);
+  color: var(--text-h);
   cursor: pointer;
 }
 .field input {
@@ -815,7 +969,7 @@ img { display:block; max-width:100%; }
   transition: border-color .18s, box-shadow .18s;
   touch-action: manipulation;
 }
-.field input::placeholder { color: #a090c0; }
+.field input::placeholder { color: var(--text-p); }
 .field input:hover:not(:focus) { border-color: var(--pa-35); }
 .field input:focus {
   border-color: var(--input-focus);
@@ -839,7 +993,7 @@ img { display:block; max-width:100%; }
   gap: 12px;
   margin-top: auto;
   padding-top: 22px;
-  border-top: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(142,45,226,0.10);
 }
 
 .form-note {
@@ -847,7 +1001,7 @@ img { display:block; max-width:100%; }
   text-align: center;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(196,181,253,0.80);
+  color: var(--text-m);
   letter-spacing: .04em;
 }
 
@@ -858,10 +1012,10 @@ img { display:block; max-width:100%; }
   gap: 6px;
   font-family: 'Poppins', sans-serif;
   font-size: 10px;
-  color: rgba(180,165,240,0.45);
+  color: var(--text-m);
   line-height: 1.5;
 }
-.form-trust svg { flex-shrink: 0; color: rgba(167,139,250,0.50); }
+.form-trust svg { flex-shrink: 0; color: var(--brand-accent); }
 
 /* Success state */
 .success-msg {
@@ -882,10 +1036,11 @@ img { display:block; max-width:100%; }
 /* ─── FOOTER ─────────────────────────────────── */
 .footer {
   position: relative; z-index: 2;
-  background: var(--glass-foot);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
   padding: 28px 0;
 }
 .footer-row {
@@ -900,7 +1055,7 @@ img { display:block; max-width:100%; }
 }
 .footer-logo img  { height:24px; }
 .footer-link { font-family:'Poppins',sans-serif; font-size:10px; color:var(--text-m); text-decoration:none; transition:color .2s; }
-.footer-link:hover { color:rgba(196,181,253,1); }
+.footer-link:hover { color:var(--brand-start); }
 .footer-copy { font-family:'Poppins',sans-serif; font-size:10px; color:var(--text-m); }
 
 
@@ -910,6 +1065,7 @@ img { display:block; max-width:100%; }
     grid-template-columns: 1fr;
     padding-bottom: 32px;
   }
+  .left-col,
   .copy-card,
   .right-col,
   .form-card { min-width: 0; width: 100%; box-sizing: border-box; }
@@ -961,7 +1117,7 @@ img { display:block; max-width:100%; }
 <body>
 
 <!-- Static gradient background -->
-<div id="static-bg" aria-hidden="true"></div>
+<div id="static-bg" aria-hidden="true"><div id="bg-glow"></div></div>
 
 <a class="skip" href="#main">Skip to content</a>
 
@@ -971,7 +1127,7 @@ img { display:block; max-width:100%; }
     <div class="wrap">
       <div class="nav-row">
         <a href="/" aria-label="Snowfox AI – home" class="nav-logo">
-          <img src="logo-dark.png" alt="Snowfox AI" height="28">
+          <img src="logo-light.png" alt="Snowfox AI" height="28">
         </a>
 
         <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
@@ -1027,48 +1183,66 @@ img { display:block; max-width:100%; }
     <div class="body-grid">
 
       <!-- LEFT: copy -->
-      <div class="copy-card glass" role="main">
+      <div class="left-col">
+        <div class="copy-card" role="main">
+          <!-- Liquid glass layers (identical stack to form card) -->
+          <div class="lg-blur"    aria-hidden="true"></div>
+          <div class="lg-tint"    aria-hidden="true"></div>
+          <div class="lg-shimmer" aria-hidden="true"></div>
+          <div class="lg-shine"   aria-hidden="true"></div>
+          <div class="lg-edge"    aria-hidden="true"></div>
 
-        <!-- Section 1: The Challenge -->
-        <div class="csect">
-          <p class="csect-eye" data-i18n="challenge-eye">The Challenge</p>
-          <h2 class="csect-h" data-i18n="challenge-title">Why Data Investments Underdeliver</h2>
-          <p class="csect-body" data-i18n="challenge-body">Most organizations are sitting on untapped data potential. The gap isn't in the amount of data collected — it's in how effectively that data drives decisions and business outcomes.</p>
-          <ul class="prob-list" role="list" aria-label="Common data maturity challenges">
-            <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-1">Poor data quality and lack of trust</span></li>
-            <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-2">Data siloed across teams and systems</span></li>
-            <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-3">No clear data governance or ownership</span></li>
-            <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-4">Missing data strategy and roadmap</span></li>
-            <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-5">Decisions driven by gut, not data</span></li>
-          </ul>
-        </div>
+          <div class="lg-content">
 
-        <div class="csect-rule" aria-hidden="true"></div>
+            <!-- Section 1: The Challenge -->
+            <div class="csect">
+              <p class="csect-eye" data-i18n="challenge-eye">The Challenge</p>
+              <h2 class="csect-h" data-i18n="challenge-title">Why Data Investments Underdeliver</h2>
+              <p class="csect-body" data-i18n="challenge-body">Most organizations are sitting on untapped data potential. The gap isn't in the amount of data collected — it's in how effectively that data drives decisions and business outcomes.</p>
+              <ul class="prob-list" role="list" aria-label="Common data maturity challenges">
+                <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-1">Poor data quality and lack of trust</span></li>
+                <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-2">Data siloed across teams and systems</span></li>
+                <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-3">No clear data governance or ownership</span></li>
+                <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-4">Missing data strategy and roadmap</span></li>
+                <li class="prob-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="challenge-5">Decisions driven by gut, not data</span></li>
+              </ul>
+            </div>
 
-        <!-- Section 2: What you get -->
-        <div class="csect">
-          <p class="csect-eye" data-i18n="results-eye">Your Results</p>
-          <h2 class="csect-h" data-i18n="results-title">What You'll Get from This Assessment</h2>
-          <ul class="deliv-list" role="list" aria-label="Assessment deliverables">
-            <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-1">A clear Data Maturity Score</span></li>
-            <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-2">Identification of your biggest data gaps</span></li>
-            <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-3">A structured view across 5 maturity dimensions</span></li>
-            <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-4">Strategic recommendations for your next level</span></li>
-            <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-5">A roadmap to turn data into competitive advantage</span></li>
-          </ul>
+            <div class="csect-rule" aria-hidden="true"></div>
 
-          <div class="time-badge" role="note" aria-label="Completion time">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span data-i18n="time-badge">Completion time: less than 10 minutes</span>
+            <!-- Section 2: What you get -->
+            <div class="csect">
+              <p class="csect-eye" data-i18n="results-eye">Your Results</p>
+              <h2 class="csect-h" data-i18n="results-title">What You'll Get from This Assessment</h2>
+              <ul class="deliv-list" role="list" aria-label="Assessment deliverables">
+                <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-1">A clear Data Maturity Score</span></li>
+                <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-2">Identification of your biggest data gaps</span></li>
+                <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-3">A structured view across 5 maturity dimensions</span></li>
+                <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-4">Strategic recommendations for your next level</span></li>
+                <li class="deliv-item"><span class="prob-pip" aria-hidden="true">–</span><span data-i18n="results-5">A roadmap to turn data into competitive advantage</span></li>
+              </ul>
+
+              <div class="time-badge" role="note" aria-label="Completion time">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span data-i18n="time-badge">Completion time: less than 10 minutes</span>
+              </div>
+            </div>
+
           </div>
         </div>
-
       </div>
 
       <!-- RIGHT: single premium conversion card -->
       <div class="right-col">
         <div class="form-card" id="form">
-          <div id="form-content" style="flex:1;display:flex;flex-direction:column;">
+          <!-- Liquid glass layers -->
+          <div class="lg-blur"    aria-hidden="true"></div>
+          <div class="lg-tint"    aria-hidden="true"></div>
+          <div class="lg-shimmer" aria-hidden="true"></div>
+          <div class="lg-shine"   aria-hidden="true"></div>
+          <div class="lg-edge"    aria-hidden="true"></div>
+
+          <div id="form-content" class="lg-content">
 
             <!-- Card header -->
             <div class="form-header">
@@ -1146,7 +1320,7 @@ img { display:block; max-width:100%; }
   <div class="wrap">
     <div class="footer-row">
       <a href="/" aria-label="Snowfox AI">
-        <img src="logo-dark.png" alt="Snowfox AI" height="24">
+        <img src="logo-light.png" alt="Snowfox AI" height="24">
       </a>
       <a href="https://snowfox-ai.com" class="footer-link" rel="noopener">snowfox-ai.com</a>
       <p class="footer-copy">© 2025 Snowfox AI. All rights reserved.</p>
@@ -1427,6 +1601,27 @@ form.addEventListener('submit', e => {
     });
   }
 }());
+
+
+
 </script>
+
+<!-- Liquid glass SVG filter -->
+<svg style="display:none" aria-hidden="true">
+  <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+    <feTurbulence type="fractalNoise" baseFrequency="0.001 0.005" numOctaves="1" seed="17" result="turbulence"/>
+    <feComponentTransfer in="turbulence" result="mapped">
+      <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5"/>
+      <feFuncG type="gamma" amplitude="0" exponent="1" offset="0"/>
+      <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5"/>
+    </feComponentTransfer>
+    <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
+    <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lightingColor="white" result="specLight">
+      <fePointLight x="-200" y="-200" z="300"/>
+    </feSpecularLighting>
+    <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage"/>
+    <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 </body>
 </html>
