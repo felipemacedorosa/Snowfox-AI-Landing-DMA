@@ -636,14 +636,14 @@ img { display:block; max-width:100%; }
   border-radius: var(--r-lg);
   padding: 40px 44px 36px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.55);
-  border-top-color: rgba(255,255,255,0.80);
-  border-left-color: rgba(255,255,255,0.70);
+  border: 1px solid rgba(142,45,226,0.14);
+  border-top-color: rgba(255,255,255,0.95);
+  border-left-color: rgba(255,255,255,0.90);
   box-shadow:
-    0 4px 24px rgba(0,0,0,0.08),
-    0 1px  6px rgba(0,0,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.80),
-    inset 1px 0 0 rgba(255,255,255,0.55);
+    0 4px 32px rgba(80,0,200,0.10),
+    0 1px  6px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 1px 0 0 rgba(255,255,255,0.80);
 }
 @media(max-width:640px) {
   .copy-card,
@@ -783,14 +783,14 @@ img { display:block; max-width:100%; }
   border-radius: var(--r-lg);
   padding: 40px 44px 36px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.55);
-  border-top-color: rgba(255,255,255,0.80);
-  border-left-color: rgba(255,255,255,0.70);
+  border: 1px solid rgba(142,45,226,0.14);
+  border-top-color: rgba(255,255,255,0.95);
+  border-left-color: rgba(255,255,255,0.90);
   box-shadow:
-    0 4px 24px rgba(0,0,0,0.08),
-    0 1px  6px rgba(0,0,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.80),
-    inset 1px 0 0 rgba(255,255,255,0.55);
+    0 4px 32px rgba(80,0,200,0.10),
+    0 1px  6px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 1px 0 0 rgba(255,255,255,0.80);
   transition: all 0.7s cubic-bezier(0.175,0.885,0.32,2.2);
 }
 
@@ -805,13 +805,13 @@ img { display:block; max-width:100%; }
   pointer-events: none;
 }
 
-/* Layer 1 — translucent white tint (light enough to see gradient through) */
+/* Layer 1 — white tint — raised opacity for solid card feel */
 .lg-tint {
   position: absolute;
   inset: 0;
   z-index: 10;
   border-radius: inherit;
-  background: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.82);
   pointer-events: none;
 }
 
