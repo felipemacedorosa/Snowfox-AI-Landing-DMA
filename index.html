@@ -87,6 +87,18 @@ img { display:block; max-width:100%; }
   pointer-events: none;
 }
 
+/* ─── PURPLE ATMOSPHERIC GLARE ───────────────── */
+#bg-glare {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -5%,  rgba(142,45,226,0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 40% at 18% 60%,  rgba(112,48,160,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 85% 40%,  rgba(74,0,224,0.12)  0%, transparent 65%);
+}
+
 /* ─── LAYOUT ─────────────────────────────────── */
 .page {
   position: relative;
@@ -1097,8 +1109,10 @@ img { display:block; max-width:100%; }
 </head>
 <body>
 
-<!-- Static gradient background -->
+<!-- WebGL animated shader background -->
 <canvas id="shader-bg" aria-hidden="true"></canvas>
+<!-- Purple atmospheric glare overlay -->
+<div id="bg-glare" aria-hidden="true"></div>
 
 <a class="skip" href="#main">Skip to content</a>
 
