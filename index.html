@@ -1603,6 +1603,7 @@ form.addEventListener('submit', e => {
     precision highp float;
     uniform vec2  iResolution;
     uniform float iTime;
+    uniform float iScrollBias;
 
     const float overallSpeed      = 0.2;
     const float gridSmoothWidth   = 0.015;
@@ -1668,12 +1669,12 @@ form.addEventListener('submit', e => {
         float rand      = random(offPos+offTime)*0.5+0.5;
         float halfWidth = mix(minLineWidth,maxLineWidth,rand*hFade)/2.0;
         float offset    = random(offPos+offTime*(1.0+nli))*mix(minOffsetSpread,maxOffsetSpread,hFade);
-        float linePos   = getPlasmaY(space.x,hFade,offset-2.0);
+        float linePos   = getPlasmaY(space.x,hFade,offset-2.0+iScrollBias);
         float line      = drawSmoothLine(linePos,halfWidth,space.y)/2.0
                         + drawCrispLine(linePos,halfWidth*0.15,space.y);
 
         float cx   = mod(float(l)+iTime*lineSpeed,25.0)-12.0;
-        vec2  cPos = vec2(cx,getPlasmaY(cx,hFade,offset-2.0));
+        vec2  cPos = vec2(cx,getPlasmaY(cx,hFade,offset-2.0+iScrollBias));
         float circle = drawCircle(cPos,0.01,space)*4.0;
 
         line += circle;
@@ -1737,10 +1738,16 @@ form.addEventListener('submit', e => {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
 
   const info = {
-    aPos:  gl.getAttribLocation(prog,  'aVertexPosition'),
-    uRes:  gl.getUniformLocation(prog, 'iResolution'),
-    uTime: gl.getUniformLocation(prog, 'iTime'),
+    aPos:        gl.getAttribLocation(prog,  'aVertexPosition'),
+    uRes:        gl.getUniformLocation(prog, 'iResolution'),
+    uTime:       gl.getUniformLocation(prog, 'iTime'),
+    uScrollBias: gl.getUniformLocation(prog, 'iScrollBias'),
   };
+
+  let scrollBias = 0, scrollBiasTarget = 0;
+  window.addEventListener('scroll', () => {
+    scrollBiasTarget = Math.min(window.scrollY / 500 * 2.0, 2.0);
+  }, { passive: true });
 
   function resize() {
     canvas.width  = window.innerWidth;
@@ -1758,8 +1765,10 @@ form.addEventListener('submit', e => {
     gl.clearColor(0.965, 0.942, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(prog);
+    scrollBias += (scrollBiasTarget - scrollBias) * 0.06;
     gl.uniform2f(info.uRes,  canvas.width, canvas.height);
     gl.uniform1f(info.uTime, t);
+    gl.uniform1f(info.uScrollBias, scrollBias);
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.vertexAttribPointer(info.aPos, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(info.aPos);
