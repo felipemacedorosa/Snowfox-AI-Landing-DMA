@@ -812,18 +812,22 @@ img { display:block; max-width:100%; }
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  backdrop-filter: blur(18px) saturate(200%) brightness(1.08);
-  -webkit-backdrop-filter: blur(18px) saturate(200%) brightness(1.08);
+  backdrop-filter: blur(28px) saturate(220%) brightness(1.06);
+  -webkit-backdrop-filter: blur(28px) saturate(220%) brightness(1.06);
   pointer-events: none;
 }
 
-/* Layer 1 — white tint — raised opacity for solid card feel */
+/* Layer 1 — white tint with faint purple blush */
 .lg-tint {
   position: absolute;
   inset: 0;
   z-index: 10;
   border-radius: inherit;
-  background: rgba(255,255,255,0.82);
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.88) 0%,
+    rgba(245,240,255,0.78) 100%
+  );
   pointer-events: none;
 }
 
@@ -841,10 +845,10 @@ img { display:block; max-width:100%; }
   border-radius: inherit;
   background: linear-gradient(
     148deg,
-    rgba(255,255,255,0.62) 0%,
-    rgba(255,255,255,0.22) 22%,
-    rgba(255,255,255,0.04) 50%,
-    rgba(255,255,255,0.08) 100%
+    rgba(255,255,255,0.72) 0%,
+    rgba(255,255,255,0.28) 18%,
+    rgba(255,255,255,0.02) 46%,
+    rgba(245,240,255,0.10) 100%
   );
   pointer-events: none;
 }
@@ -857,8 +861,8 @@ img { display:block; max-width:100%; }
   border-radius: inherit;
   overflow: hidden;
   box-shadow:
-    inset  2px  2px 2px 0 rgba(255,255,255,0.70),
-    inset -1px -1px 2px 0 rgba(255,255,255,0.25);
+    inset  2px  2px 3px 0 rgba(255,255,255,0.90),
+    inset -1px -1px 3px 0 rgba(200,180,255,0.20);
   pointer-events: none;
 }
 
