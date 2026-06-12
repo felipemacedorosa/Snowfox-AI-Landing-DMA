@@ -568,7 +568,8 @@ img { display:block; max-width:100%; }
   left: 50%;
   transform: translateX(-50%);
   animation: bounceDown 2.2s ease-in-out infinite;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1232,7 +1233,7 @@ img { display:block; max-width:100%; }
 
 
       <!-- Scroll hint -->
-      <div class="scroll-hint" aria-hidden="true">
+      <div class="scroll-hint" role="button" aria-label="Scroll to assessment" onclick="document.getElementById('cards-section').scrollIntoView({behavior:'smooth'})">
         <div class="scroll-hint-ring">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -1240,7 +1241,7 @@ img { display:block; max-width:100%; }
     </div>
 
     <!-- Two-column -->
-    <div class="body-grid">
+    <div class="body-grid" id="cards-section">
 
       <!-- LEFT: copy -->
       <div class="left-col">
