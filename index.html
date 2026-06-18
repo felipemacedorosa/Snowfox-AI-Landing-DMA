@@ -1245,7 +1245,7 @@ img { display:block; max-width:100%; }
 
       <!-- Scroll hint -->
       <div class="scroll-hint" role="button" aria-label="Scroll to assessment" onclick="(function(){ const el=document.getElementById('cards-section'); const navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'))||72; window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - navH - 28, behavior:'smooth'}); })()">
-        Get Started
+        <span data-i18n="scroll-cta">Get Started</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
@@ -1530,6 +1530,7 @@ form.addEventListener('submit', e => {
       'cta':             'Start Data Maturity Assessment',
       'form-note':       'Free &nbsp;·&nbsp; Instant results &nbsp;·&nbsp; No commitment',
       'hero-cta':        'Start Your Free Assessment',
+      'scroll-cta':      'Get Started',
     },
     pt: {
       'title':           'Avaliação de Maturidade de Dados | SnowFox AI',
@@ -1569,6 +1570,7 @@ form.addEventListener('submit', e => {
       'cta':             'Iniciar Avaliação de Maturidade de Dados',
       'form-note':       'Gratuito &nbsp;·&nbsp; Resultado imediato &nbsp;·&nbsp; Sem compromisso',
       'hero-cta':        'Iniciar Avaliação Gratuita',
+      'scroll-cta':      'Começar',
     },
     es: {
       'title':           'Evaluación de Madurez de Datos | SnowFox AI',
@@ -1608,6 +1610,7 @@ form.addEventListener('submit', e => {
       'cta':             'Iniciar Evaluación de Madurez de Datos',
       'form-note':       'Gratis &nbsp;·&nbsp; Resultado inmediato &nbsp;·&nbsp; Sin compromiso',
       'hero-cta':        'Iniciar Evaluación Gratuita',
+      'scroll-cta':      'Comenzar',
     },
   };
 
